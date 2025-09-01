@@ -1,0 +1,42 @@
+---
+const { title = 'Notas', description = 'Notas personales', hideHeader = false } = Astro.props as {
+  title?: string;
+  description?: string;
+  hideHeader?: boolean;
+};
+---
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" />
+    <title>{title}</title>
+    <link rel="stylesheet" href="/fonts/inter.css" />
+    <link rel="stylesheet" href="/fonts/jetbrains-mono.css" />
+    <link rel="stylesheet" href={Astro.resolve('../styles/global.css')} />
+  </head>
+  <body>
+    {!hideHeader && (
+      <header>
+        <nav class="container nav">
+          <a class="brand" href="/">Notas</a>
+          <ul class="links">
+            <li><a href="/notes">Apuntes</a></li>
+            <li><a href="/tags">Tags</a></li>
+            <li><a href="/search">Buscar</a></li>
+          </ul>
+        </nav>
+      </header>
+    )}
+    <main class="container">
+      <slot />
+    </main>
+    <footer class="container footer">
+      <p>
+        Hecho con <a href="https://astro.build">Astro</a> · Plantilla Notion Notes
+      </p>
+    </footer>
+  </body>
+  </html>

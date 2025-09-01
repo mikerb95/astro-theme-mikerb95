@@ -1,0 +1,26 @@
+---
+const { placeholder = 'Buscar notas…' } = Astro.props as { placeholder?: string };
+---
+<div class="search" data-enhanced>
+  <input type="search" id="q" name="q" placeholder={placeholder} aria-label="Buscar notas" />
+  <slot />
+</div>
+<script>
+  const root = document.currentScript?.parentElement;
+  const input = root?.querySelector('input[type="search"]');
+  const items = root?.querySelectorAll('[data-filterable]');
+  function matches(el, q) {
+    const hay = (el.getAttribute('data-filter') || '').toLowerCase();
+    return hay.includes(q);
+  }
+  input?.addEventListener('input', () => {
+    const q = input.value.trim().toLowerCase();
+    items?.forEach((el) => {
+      if (!q || matches(el, q)) {
+        el.removeAttribute('hidden');
+      } else {
+        el.setAttribute('hidden', '');
+      }
+    });
+  });
+</script>

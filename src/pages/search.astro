@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import Search from '../components/Search.astro';
+import { getCollection } from 'astro:content';
+
+const notes = (await getCollection('notes')).filter((n) => !n.data.draft)
+  .sort((a,b)=> (b.data.updated||'').localeCompare(a.data.updated||''));
+---
+<Base title="Buscar" description="Busca dentro de tus notas">
+  <Search />
+  <ul style="list-style:none;padding:0;margin:0">
+    {notes.map((n) => (
+      <li data-filterable data-filter={(n.data.title + ' ' + (n.data.description||'') + ' ' + n.data.tags.join(' ')).toLowerCase()}>
+        <a class="card" href={`/notes/${n.slug}/`}>
+          <strong>{n.data.title}</strong>
+          {n.data.description && <p class="muted">{n.data.description}</p>}
+        </a>
+      </li>
+    ))}
+  </ul>
+</Base>

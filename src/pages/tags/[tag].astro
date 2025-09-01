@@ -1,0 +1,28 @@
+---
+import Base from '../../layouts/Base.astro';
+import NoteListItem from '../../components/NoteListItem.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const notes = (await getCollection('notes')).filter((n) => !n.data.draft);
+  const tags = new Set<string>();
+  for (const n of notes) { n.data.tags.forEach((t)=> tags.add(t.toLowerCase())); }
+  return [...tags].map((t) => ({ params: { tag: t }}));
+}
+
+const { tag } = Astro.params;
+const tagLC = (tag || '').toLowerCase();
+const notes = (await getCollection('notes')).filter((n) => !n.data.draft && n.data.tags.map((t)=>t.toLowerCase()).includes(tagLC));
+---
+<Base title={`Tag: #${tag}`} description={`Notas con el tag ${tag}`}>
+  <h1>#{tag}</h1>
+  {notes.length === 0 ? (
+    <p class="muted">No hay notas con este tag.</p>
+  ) : (
+    <div>
+      {notes.map((n) => (
+        <NoteListItem href={`/notes/${n.slug}/`} title={n.data.title} description={n.data.description} tags={n.data.tags} updated={n.data.updated} />
+      ))}
+    </div>
+  )}
+</Base>

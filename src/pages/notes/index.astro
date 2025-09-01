@@ -1,0 +1,19 @@
+---
+import Base from '../../layouts/Base.astro';
+import NoteListItem from '../../components/NoteListItem.astro';
+import Search from '../../components/Search.astro';
+import { getCollection } from 'astro:content';
+
+const notes = (await getCollection('notes')).filter((n) => !n.data.draft)
+  .sort((a,b)=> (b.data.updated||'').localeCompare(a.data.updated||''));
+---
+<Base title="Apuntes" description="Lista de todos los apuntes">
+  <Search />
+  <div>
+    {notes.map((n) => (
+      <div data-filterable data-filter={(n.data.title + ' ' + (n.data.description||'') + ' ' + n.data.tags.join(' ')).toLowerCase()}>
+        <NoteListItem href={`/notes/${n.slug}/`} title={n.data.title} description={n.data.description} tags={n.data.tags} updated={n.data.updated} />
+      </div>
+    ))}
+  </div>
+</Base>

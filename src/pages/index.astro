@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import Card from '../components/Card.astro';
+import { getCollection } from 'astro:content';
+
+const notes = (await getCollection('notes')).filter((n) => !n.data.draft);
+const recent = notes.sort((a,b)=> (b.data.updated||'').localeCompare(a.data.updated||'')).slice(0,6);
+---
+<Base title="Notas · Inicio" description="Apuntes personales estilo Notion con Astro">
+  <section>
+    <h1>Tu espacio de apuntes</h1>
+    <p class="muted">Crea y organiza notas en Markdown/MDX con etiquetas, búsqueda y un diseño limpio.</p>
+    <div class="grid">
+      <Card href="/notes" title="Ver apuntes" description="Lista completa de notas" />
+      <Card href="/tags" title="Explorar tags" description="Agrupa por etiquetas" />
+      <Card href="/search" title="Buscar" description="Encuentra lo que necesitas" />
+    </div>
+  </section>
+  <section>
+    <h2>Recientes</h2>
+    <ul style="list-style:none;padding:0;margin:0">
+      {recent.map((n)=> (
+        <li data-filterable data-filter={(n.data.title + ' ' + (n.data.description||'') + ' ' + n.data.tags.join(' ')).toLowerCase()}>
+          <a class="card" href={`/notes/${n.slug}/`}>
+            <strong>{n.data.title}</strong>
+            {n.data.description && <p class="muted">{n.data.description}</p>}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Base>

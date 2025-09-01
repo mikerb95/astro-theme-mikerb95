@@ -1,0 +1,27 @@
+---
+import Base from './Base.astro';
+import TagPill from '../components/TagPill.astro';
+
+const { title, description, tags = [], updated } = Astro.props as {
+  title: string;
+  description?: string;
+  tags?: string[];
+  updated?: string;
+};
+---
+<Base title={`${title} · Apuntes`} description={description}>
+  <article class="note">
+    <h1 class="note-title">{title}</h1>
+    <p class="note-meta">
+      {updated && (<span>Actualizado: {new Date(updated).toLocaleDateString('es')}</span>)}
+    </p>
+    {tags.length > 0 && (
+      <ul class="tags">
+        {tags.map((t) => <li><TagPill tag={t} href={`/tags/${encodeURIComponent(t.toLowerCase())}`} /></li>)}
+      </ul>
+    )}
+    <div class="prose">
+      <slot />
+    </div>
+  </article>
+</Base>

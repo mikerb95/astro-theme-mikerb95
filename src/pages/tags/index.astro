@@ -1,0 +1,21 @@
+---
+import Base from '../../layouts/Base.astro';
+import Card from '../../components/Card.astro';
+import { getCollection } from 'astro:content';
+
+const notes = (await getCollection('notes')).filter((n) => !n.data.draft);
+const tagMap = new Map<string, number>();
+for (const n of notes) {
+  for (const t of n.data.tags) {
+    tagMap.set(t, (tagMap.get(t) || 0) + 1);
+  }
+}
+const tags = [...tagMap.entries()].sort((a,b)=> b[1]-a[1]);
+---
+<Base title="Tags" description="Explora por etiquetas">
+  <div class="grid">
+    {tags.map(([tag,count]) => (
+      <Card href={`/tags/${encodeURIComponent(tag.toLowerCase())}/`} title={`#${tag}`} description={`${count} nota${count===1?'':'s'}`} />
+    ))}
+  </div>
+</Base>

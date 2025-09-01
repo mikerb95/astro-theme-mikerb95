@@ -1,0 +1,21 @@
+---
+import TagPill from './TagPill.astro';
+
+const { href, title, description, tags = [], updated } = Astro.props as {
+  href: string;
+  title: string;
+  description?: string;
+  tags?: string[];
+  updated?: string;
+};
+---
+<article class="note-list-item">
+  <a href={href} class="title">{title}</a>
+  {description && <p class="muted">{description}</p>}
+  <div class="row">
+    <div class="tags">
+      {tags.map((t) => <TagPill tag={t} href={`/tags/${encodeURIComponent(t.toLowerCase())}`} />)}
+    </div>
+    {updated && <time class="muted">{new Date(updated).toLocaleDateString('es')}</time>}
+  </div>
+</article>
