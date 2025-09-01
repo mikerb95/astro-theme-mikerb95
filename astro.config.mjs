@@ -5,8 +5,5 @@ import sitemap from '@astrojs/sitemap';
 // https://docs.astro.build/en/reference/configuration-reference/
 export default defineConfig({
   site: 'https://your-site-url.example.com',
-  integrations: [mdx(), sitemap()],
-  experimental: {
-    contentCollectionJsonSchema: true
-  }
+  integrations: [mdx(), sitemap()]
 });
