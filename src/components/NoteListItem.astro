@@ -6,7 +6,7 @@ const { href, title, description, tags = [], updated } = Astro.props as {
   title: string;
   description?: string;
   tags?: string[];
-  updated?: string;
+  updated?: string | Date;
 };
 ---
 <article class="note-list-item">
@@ -16,6 +16,6 @@ const { href, title, description, tags = [], updated } = Astro.props as {
     <div class="tags">
       {tags.map((t) => <TagPill tag={t} href={`/tags/${encodeURIComponent(t.toLowerCase())}`} />)}
     </div>
-    {updated && <time class="muted">{new Date(updated).toLocaleDateString('es')}</time>}
+  {updated && <time class="muted">{new Date(updated as any).toLocaleDateString('es')}</time>}
   </div>
 </article>

@@ -4,8 +4,9 @@ import NoteListItem from '../../components/NoteListItem.astro';
 import Search from '../../components/Search.astro';
 import { getCollection } from 'astro:content';
 
+const norm = (d:any)=> d? new Date(d as any).toISOString(): '';
 const notes = (await getCollection('notes')).filter((n) => !n.data.draft)
-  .sort((a,b)=> (b.data.updated||'').localeCompare(a.data.updated||''));
+  .sort((a,b)=> norm(b.data.updated).localeCompare(norm(a.data.updated)));
 ---
 <Base title="Apuntes" description="Lista de todos los apuntes">
   <Search />

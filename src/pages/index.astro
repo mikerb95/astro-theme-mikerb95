@@ -4,7 +4,8 @@ import Card from '../components/Card.astro';
 import { getCollection } from 'astro:content';
 
 const notes = (await getCollection('notes')).filter((n) => !n.data.draft);
-const recent = notes.sort((a,b)=> (b.data.updated||'').localeCompare(a.data.updated||'')).slice(0,6);
+const norm = (d:any)=> d? new Date(d as any).toISOString(): '';
+const recent = notes.sort((a,b)=> norm(b.data.updated).localeCompare(norm(a.data.updated))).slice(0,6);
 ---
 <Base title="Notas · Inicio" description="Apuntes personales estilo Notion con Astro">
   <section>

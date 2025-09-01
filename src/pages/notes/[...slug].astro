@@ -4,7 +4,7 @@ import Note from '../../layouts/Note.astro';
 
 export async function getStaticPaths() {
   const notes = (await getCollection('notes')).filter((n)=> !n.data.draft);
-  return notes.map((n)=> ({ params: { slug: n.slug.split('/') }, props: { entry: n } }));
+  return notes.map((n)=> ({ params: { slug: n.slug }, props: { entry: n } }));
 }
 
 const { entry } = Astro.props as any;
